@@ -35,7 +35,10 @@ public class Chain {
     
     private List<Block> data = new ArrayList<>();
 
-    public synchronized void addTransaction(Transaction transaction) {
+    public synchronized void addBlock(Transaction transaction) {
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+        addBlock(transactions);
     }
     
     public synchronized void addBlock(List<Transaction> transactions) {

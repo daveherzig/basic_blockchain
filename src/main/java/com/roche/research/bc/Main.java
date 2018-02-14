@@ -63,15 +63,15 @@ public class Main {
         initTxGilsdom1.transactionId = "0";
         initTxGilsdom1.outputs.add(new TransactionOutput(initTxGilsdom1.receiver, initTxGilsdom1.value, initTxGilsdom1.transactionId));
         Chain.UTXOs.put(initTxGilsdom1.outputs.get(0).id, initTxGilsdom1.outputs.get(0));
-        List<Transaction> transactions = new ArrayList<>();
-        transactions.add(initTxGilsdom1);
-        blockChain.addBlock(transactions);
-        
+        blockChain.addBlock(initTxGilsdom1);
         
         printBalance(wallets);
         
         // transfer some money
+        Transaction m2gTransaction = gilsdom1.sendMoney(doerneng.getPublicKey(), 20);
+        blockChain.addBlock(m2gTransaction);
         
+        printBalance(wallets);
         
         System.out.println(blockChain.toJSon());
     }
