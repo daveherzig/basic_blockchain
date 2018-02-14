@@ -35,12 +35,18 @@ public class Chain {
     
     private List<Block> data = new ArrayList<>();
 
-    public synchronized void addBlock(String d) {
+    public synchronized void addTransaction(Transaction transaction) {
+    }
+    
+    public synchronized void addBlock(List<Transaction> transactions) {
         Block block = null;
         if (data.size() == 0) {
-            block = new Block(d, "0");
+            block = new Block("0");
         } else {
-            block = new Block(d, data.get(data.size() - 1).getHash());
+            block = new Block(data.get(data.size() - 1).getHash());
+        }
+        for (Transaction t : transactions) {
+            block.addTransaction(t);
         }
         block.mineBlock(DIFFICULTY);
         data.add(block);

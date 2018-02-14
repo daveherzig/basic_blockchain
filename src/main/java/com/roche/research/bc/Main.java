@@ -17,6 +17,8 @@
 package com.roche.research.bc;
 
 import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -29,29 +31,37 @@ public class Main {
         // setup security provide
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         
+        // create blockchain
+        Chain blockChain = new Chain();
+        
         // create new wallets
         Wallet gilsdom1 = new Wallet("Moritz Gilsdorf");
         Wallet doerneng = new Wallet("Gunther Doernen");
         Wallet herzigd = new Wallet("David Herzig");
         
         // show the keys
+        System.out.println("Keys for Moritz");
         System.out.println(CryptoUtil.getStringFromKey(gilsdom1.getPrivateKey()));
         System.out.println(CryptoUtil.getStringFromKey(gilsdom1.getPublicKey()));
         
+        System.out.println("Keys for Gunther");
         System.out.println(CryptoUtil.getStringFromKey(doerneng.getPrivateKey()));
         System.out.println(CryptoUtil.getStringFromKey(doerneng.getPublicKey()));
         
+        System.out.println("Keys for David");
         System.out.println(CryptoUtil.getStringFromKey(herzigd.getPrivateKey()));
         System.out.println(CryptoUtil.getStringFromKey(herzigd.getPublicKey()));
         
-        // moritz transfers some money to gunther
-        Transaction transaction = new Transaction(gilsdom1.getPublicKey(), doerneng.getPublicKey(), 5, null);
-        transaction.generateSignature(gilsdom1.getPrivateKey());
-        
-        // verify signature
-        System.out.println(transaction.verifySignature());
-        
-        
+        // create some transactions - give everyone some coins
+        Wallet coinbase = new Wallet("init");
+        Transaction initTxGilsdom1 = new Transaction(coinbase.getPublicKey(), gilsdom1.getPublicKey(), 100.0f, null);
+        initTxGilsdom1.generateSignature(coinbase.getPrivateKey());
+        initTxGilsdom1.transactionId = "0";
+        initTxGilsdom1.outputs.add(new TransactionOutput(initTxGilsdom1.receiver, initTxGilsdom1.value, initTxGilsdom1.transactionId));
+        Chain.UTXOs.put(initTxGilsdom1.outputs.get(0).id, initTxGilsdom1.outputs.get(0));
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(initTxGilsdom1);
+        blockChain.addBlock(transactions);
     }
     
 }

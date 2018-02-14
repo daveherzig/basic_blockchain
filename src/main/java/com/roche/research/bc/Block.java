@@ -16,6 +16,9 @@
  */
 package com.roche.research.bc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author herzigd
@@ -25,7 +28,7 @@ public class Block {
     private String hash;
     private String previousHash;
     private String merkleRoot;
-    private List<Transaction> transaction = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
     private long timestamp;
     private long nonce;
 
@@ -36,8 +39,7 @@ public class Block {
     }
 
     public String calculateHash() {
-        String value = data
-                + previousHash
+        String value = previousHash
                 + Long.toString(timestamp)
                 + Long.toString(nonce)
                 + merkleRoot;
@@ -47,6 +49,7 @@ public class Block {
     public void mineBlock(int difficulty) {
         merkleRoot = CryptoUtil.getMerkleRoot(transactions);
         String target = new String(new char[difficulty]).replace('\0', '0');
+        hash = calculateHash();
         while (!hash.substring(0, difficulty).equals(target)) {
             nonce++;
             hash = calculateHash();
@@ -67,10 +70,6 @@ public class Block {
         transactions.add(transaction);
         System.out.println("Transaction successfully added to block");
         return true;
-    }
-
-    public String getData() {
-        return data;
     }
 
     public String getHash() {
