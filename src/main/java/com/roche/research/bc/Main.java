@@ -38,6 +38,10 @@ public class Main {
         Wallet gilsdom1 = new Wallet("Moritz Gilsdorf");
         Wallet doerneng = new Wallet("Gunther Doernen");
         Wallet herzigd = new Wallet("David Herzig");
+        List<Wallet> wallets = new ArrayList<>();
+        wallets.add(gilsdom1);
+        wallets.add(doerneng);
+        wallets.add(herzigd);
         
         // show the keys
         System.out.println("Keys for Moritz");
@@ -52,7 +56,7 @@ public class Main {
         System.out.println(CryptoUtil.getStringFromKey(herzigd.getPrivateKey()));
         System.out.println(CryptoUtil.getStringFromKey(herzigd.getPublicKey()));
         
-        // create some transactions - give everyone some coins
+        // create some transactions - give moritz some coins
         Wallet coinbase = new Wallet("init");
         Transaction initTxGilsdom1 = new Transaction(coinbase.getPublicKey(), gilsdom1.getPublicKey(), 100.0f, null);
         initTxGilsdom1.generateSignature(coinbase.getPrivateKey());
@@ -62,6 +66,20 @@ public class Main {
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(initTxGilsdom1);
         blockChain.addBlock(transactions);
+        
+        
+        printBalance(wallets);
+        
+        // transfer some money
+        
+        
+        System.out.println(blockChain.toJSon());
+    }
+    
+    private static void printBalance(List<Wallet> wallets) {
+        for (Wallet wallet : wallets) {
+            System.out.println(wallet.getOwner() + " : " + wallet.getBalance());
+        }
     }
     
 }

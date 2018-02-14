@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class Chain {
 
-    public static final int DIFFICULTY = 6;
+    public static final int DIFFICULTY = 4;
     public static final float MINIMUM_VALUE = 0.1f;
     public static final Map<String, TransactionOutput> UTXOs = new HashMap<>();
     
