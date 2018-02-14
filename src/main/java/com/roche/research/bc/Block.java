@@ -22,35 +22,51 @@ package com.roche.research.bc;
  */
 public class Block {
 
-    private String data;
     private String hash;
     private String previousHash;
+    private String merkleRoot;
+    private List<Transaction> transaction = new ArrayList<>();
     private long timestamp;
     private long nonce;
 
-    public Block(String data, String previousHash) {
-        this.data = data;
+    public Block(String previousHash) {
         this.previousHash = previousHash;
         this.timestamp = System.currentTimeMillis();
         this.nonce = 0;
-        this.hash = calculateHash();
     }
 
     public String calculateHash() {
         String value = data
                 + previousHash
                 + Long.toString(timestamp)
-                + Long.toString(nonce);
+                + Long.toString(nonce)
+                + merkleRoot;
         return CryptoUtil.createHash(value);
     }
 
     public void mineBlock(int difficulty) {
+        merkleRoot = CryptoUtil.getMerkleRoot(transactions);
         String target = new String(new char[difficulty]).replace('\0', '0');
         while (!hash.substring(0, difficulty).equals(target)) {
             nonce++;
             hash = calculateHash();
         }
         System.out.println("Block Mined!!! : " + hash);
+    }
+    
+    public boolean addTransaction(Transaction transaction) {
+        if (transaction == null) {
+            return false;
+        }
+        if (previousHash != "0") {
+            if (!transaction.processTransaction()) {
+                System.out.println("Transaction failed to process!");
+                return false;
+            }
+        }
+        transactions.add(transaction);
+        System.out.println("Transaction successfully added to block");
+        return true;
     }
 
     public String getData() {
