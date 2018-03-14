@@ -20,19 +20,23 @@ package com.roche.research.bc;
  * @author herzigd
  */
 public class SimpleBlock {
-    
+
+    private static final int DIFFICULTY = 6;
+
     private String hash;
     private String previousHash;
     private String data;
     private long nonce;
     private long timestamp;
-    
-    public SimpleBlock(String previousHash) {
+
+    public SimpleBlock(String previousHash, String data) {
+        this.data = data;
         this.previousHash = previousHash;
         this.timestamp = System.currentTimeMillis();
         this.nonce = 0;
+        this.hash = calculateHash();
     }
-    
+
     public String calculateHash() {
         String value = previousHash
                 + Long.toString(timestamp)
@@ -40,10 +44,43 @@ public class SimpleBlock {
                 + data;
         return CryptoUtil.createHash(value);
     }
-    
-    public static void main(String [] args) {
-        SimpleBlock b1 = new SimpleBlock(null);
-        SimpleBlock b2 = new SimpleBlock(b1.calculateHash());
-        SimpleBlock b3 = new SimpleBlock(b2.calculateHash());
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getPreviousHash() {
+        return previousHash;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void mineBlock() {
+        String target = new String(new char[DIFFICULTY]).replace('\0', '0');
+        while (!hash.substring(0, DIFFICULTY).equals(target)) {
+            nonce++;
+            hash = calculateHash();
+        }
+        System.out.println("Block Mined!!! : " + hash);
+    }
+
+    public static void main(String[] args) {
+        SimpleChain sc = new SimpleChain();
+        sc.addBlock("Hello World");
+        sc.addBlock("Data Science");
+        sc.addBlock("SDA");
+
+        System.out.println(sc);
+        System.out.println("isValid: " + sc.validate());
+
+        sc.securityAttack();
+        System.out.println(sc);
+        System.out.println("isValid: " + sc.validate());
     }
 }

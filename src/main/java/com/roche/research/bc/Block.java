@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author herzigd
  */
 public class Block {
@@ -56,7 +55,7 @@ public class Block {
         }
         System.out.println("Block Mined!!! : " + hash);
     }
-    
+
     public boolean addTransaction(Transaction transaction) {
         if (transaction == null) {
             return false;
