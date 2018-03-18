@@ -21,7 +21,7 @@ package com.roche.research.bc;
  */
 public class SimpleBlock {
 
-    private static final int DIFFICULTY = 6;
+    private static final int DIFFICULTY = 7;
 
     private String hash;
     private String previousHash;
@@ -68,19 +68,5 @@ public class SimpleBlock {
             hash = calculateHash();
         }
         System.out.println("Block Mined!!! : " + hash);
-    }
-
-    public static void main(String[] args) {
-        SimpleChain sc = new SimpleChain();
-        sc.addBlock("Hello World");
-        sc.addBlock("Data Science");
-        sc.addBlock("SDA");
-
-        System.out.println(sc);
-        System.out.println("isValid: " + sc.validate());
-
-        sc.securityAttack();
-        System.out.println(sc);
-        System.out.println("isValid: " + sc.validate());
     }
 }

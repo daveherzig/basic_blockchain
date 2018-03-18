@@ -35,7 +35,10 @@ public class SimpleChain {
         } else {
             block = new SimpleBlock(bc.get(bc.size() - 1).calculateHash(), data);
         }
-        //block.mineBlock();
+        long start = System.currentTimeMillis();
+        block.mineBlock();
+        long stop = System.currentTimeMillis();
+        System.out.println("Block mined in " + (stop-start) + "ms");
         bc.add(block);
     }
 
